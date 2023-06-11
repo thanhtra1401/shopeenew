@@ -1,0 +1,37 @@
+import * as yup from "yup";
+export const registerSchema = yup
+  .object({
+    email: yup
+      .string()
+      .max(255, "Độ dài email không được quá 255 ký tự")
+      .matches(
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
+        "Email không đúng"
+      ),
+    password: yup
+      .string()
+      .required("Bạn chưa nhập mật khẩu")
+      .min(8, "Mật khẩu phải có ít nhất 8 kí tự"),
+    confirmPassword: yup
+      .string()
+      .required("Bạn chưa nhập lại mật khẩu")
+      .min(8, "Mật khẩu phải có ít nhất 8 kí tự")
+      .oneOf([yup.ref("password")], "Mật khẩu không khớp"),
+  })
+  .required();
+export const loginSchema = registerSchema.omit(["confirmPassword"]);
+// export const loginSchema = yup
+//   .object({
+//     email: yup
+//       .string()
+//       .max(255, "Độ dài email không được quá 255 ký tự")
+//       .matches(
+//         /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
+//         "Email không đúng"
+//       ),
+//     password: yup
+//       .string()
+//       .required("Bạn chưa nhập mật khẩu")
+//       .min(8, "Mật khẩu phải có ít nhất 8 kí tự"),
+//   })
+//   .required();
