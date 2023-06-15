@@ -1,21 +1,48 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Google from "../../components/Logo/Google";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../../utils/schema";
+import { loginUser } from "../../reducers/users.slice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store";
 export default function Login() {
   interface FormData {
     email: string;
     password: string;
   }
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(loginSchema),
   });
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const onSubmit = handleSubmit(async (data) => {
+    dispatch(loginUser(data))
+      .unwrap()
+      .then(() => {
+        navigate("/");
+      })
+      .catch((rejectedValueOrSerializedError) => {
+        const formErr = rejectedValueOrSerializedError.data;
+        if (formErr?.email) {
+          setError("email", {
+            type: "server",
+            message: formErr.email,
+          });
+        }
+        if (formErr?.password) {
+          setError("password", {
+            type: "server",
+            message: formErr.password,
+          });
+        }
+      });
+  });
   return (
     <div className="bg-primary">
       <div className="container">

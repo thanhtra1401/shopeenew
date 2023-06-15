@@ -11,11 +11,11 @@ export const registerSchema = yup
     password: yup
       .string()
       .required("Bạn chưa nhập mật khẩu")
-      .min(8, "Mật khẩu phải có ít nhất 8 kí tự"),
+      .min(6, "Mật khẩu phải có ít nhất 6 kí tự"),
     confirmPassword: yup
       .string()
       .required("Bạn chưa nhập lại mật khẩu")
-      .min(8, "Mật khẩu phải có ít nhất 8 kí tự")
+      .min(6, "Mật khẩu phải có ít nhất 6 kí tự")
       .oneOf([yup.ref("password")], "Mật khẩu không khớp"),
   })
   .required();

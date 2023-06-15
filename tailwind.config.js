@@ -7,6 +7,7 @@ export default {
       colors: {
         primary: "#EE4D2D",
       },
+      display: ["group-hover"],
     },
   },
   plugins: [
@@ -26,5 +27,7 @@ export default {
         },
       });
     }),
+
+    //require("@tailwindcss/line-clamp"),
   ],
 };

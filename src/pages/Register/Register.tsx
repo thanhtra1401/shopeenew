@@ -1,8 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Google from "../../components/Logo/Google";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "../../utils/schema";
+import { omit } from "lodash";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../reducers/users.slice";
+import { AppDispatch } from "../../store";
 
 export default function Register() {
   interface FormData {
@@ -10,14 +14,39 @@ export default function Register() {
     password: string;
     confirmPassword: string;
   }
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(registerSchema),
   });
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const onSubmit = handleSubmit(async (data) => {
+    dispatch(registerUser(omit(data, ["confirmPassword"])))
+      .unwrap()
+      .then((res) => {
+        alert(res.message);
+        navigate("/login");
+      })
+      .catch((rejectedValueOrSerializedError) => {
+        const formErr = rejectedValueOrSerializedError.data;
+        if (formErr?.email) {
+          setError("email", {
+            type: "server",
+            message: formErr.email,
+          });
+        }
+        if (formErr?.password) {
+          setError("password", {
+            type: "server",
+            message: formErr.password,
+          });
+        }
+      });
+  });
   return (
     <div className="bg-primary">
       <div className="container">

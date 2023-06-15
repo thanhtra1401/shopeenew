@@ -3,10 +3,12 @@ import ProductList from "./pages/ProductList/ProductList";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import RegisterLayout from "./layouts/RegisterLayout";
+import MainLayout from "./layouts/MainLayout";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
+import Profile from "./pages/Profile/Profile";
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<ProductList />}></Route>
       <Route
         path="/login"
         element={
@@ -23,6 +25,25 @@ export default function App() {
           </RegisterLayout>
         }
       ></Route>
+      <Route
+        path="/"
+        index={true}
+        element={
+          <MainLayout>
+            <ProductList />
+          </MainLayout>
+        }
+      ></Route>
+      <Route path="" element={<ProtectedRoute />}>
+        <Route
+          path="/profile"
+          element={
+            <MainLayout>
+              <Profile />
+            </MainLayout>
+          }
+        ></Route>
+      </Route>
     </Routes>
   );
 }
