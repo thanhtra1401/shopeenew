@@ -20,6 +20,27 @@ export const registerSchema = yup
   })
   .required();
 export const loginSchema = registerSchema.omit(["confirmPassword"]);
+export const filterPriceSchema = yup
+  .object({
+    price_min: yup
+      .string()
+      .matches(/^\d+$/, "Vui lòng nhập khoảng giá chính xác"),
+
+    price_max: yup
+      .string()
+      .matches(/^\d+$/, "Vui lòng nhập khoảng giá chính xác")
+      .test(
+        "area_compare",
+        `Vui lòng nhập khoảng giá chính xác`,
+        function (price_max: string | undefined): boolean {
+          return price_max
+            ? Number(price_max) > Number(this.parent.price_min)
+            : true;
+        }
+      ),
+    //.matches(/^\d+$/, "Vui lòng nhập khoảng giá chính xác"),
+  })
+  .required();
 // export const loginSchema = yup
 //   .object({
 //     email: yup

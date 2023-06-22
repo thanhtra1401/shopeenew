@@ -1,8 +1,11 @@
 import { AuthResponse } from "../types/auth.type";
 import httpRequest from "../utils/https";
 
-export const registerAccount = (body: { email: string; password: string }) =>
-  httpRequest.post<AuthResponse>("register", body);
-export const loginAccount = (body: { email: string; password: string }) =>
-  httpRequest.post<AuthResponse>("login", body);
-export const logoutAccount = () => httpRequest.post<AuthResponse>("logout");
+const authApi = {
+  registerAccount: (body: { email: string; password: string }) =>
+    httpRequest.post<AuthResponse>("register", body),
+  loginAccount: (body: { email: string; password: string }) =>
+    httpRequest.post<AuthResponse>("login", body),
+  logoutAccount: () => httpRequest.post<AuthResponse>("logout"),
+};
+export default authApi;

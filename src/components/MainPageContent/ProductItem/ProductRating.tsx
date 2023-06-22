@@ -1,10 +1,4 @@
-function ProductRating({
-  rating,
-}: {
-  rating: number;
-  activeClassName?: string;
-  nonActiveClassName?: string;
-}) {
+function ProductRating({ rating }: { rating: number }) {
   const handleWidth = (order: number) => {
     if (order <= rating) return "100%";
     if (order > rating && order - rating < 1)

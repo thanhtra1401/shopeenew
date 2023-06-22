@@ -6,6 +6,7 @@ import RegisterLayout from "./layouts/RegisterLayout";
 import MainLayout from "./layouts/MainLayout";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import Profile from "./pages/Profile/Profile";
+import ProductDetail from "./pages/ProductDetail/ProductDetail";
 export default function App() {
   return (
     <Routes>
@@ -31,6 +32,15 @@ export default function App() {
         element={
           <MainLayout>
             <ProductList />
+          </MainLayout>
+        }
+      ></Route>
+      <Route
+        path="/:id"
+        index={true}
+        element={
+          <MainLayout>
+            <ProductDetail />
           </MainLayout>
         }
       ></Route>

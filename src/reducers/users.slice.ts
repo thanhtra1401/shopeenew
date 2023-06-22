@@ -1,8 +1,8 @@
-import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { AsyncThunk } from "@reduxjs/toolkit";
-import { loginAccount, logoutAccount, registerAccount } from "../apis/auth.api";
 import { User } from "../types/user.type";
-import { clearLS, getLS, setLS } from "../utils";
+import { getLS } from "../utils";
+import authApi from "./../apis/auth.api";
 
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>;
 
@@ -32,7 +32,7 @@ export const registerUser = createAsyncThunk(
   "users/registerUser",
   async (body: { email: string; password: string }, thunkApi) => {
     try {
-      const response = await registerAccount(body);
+      const response = await authApi.registerAccount(body);
       return response.data;
     } catch (err: any) {
       if (err.name === "AxiosError" && err.response.status === 422) {
@@ -46,7 +46,7 @@ export const loginUser = createAsyncThunk(
   "users/loginUser",
   async (body: { email: string; password: string }, thunkApi) => {
     try {
-      const response = await loginAccount(body);
+      const response = await authApi.loginAccount(body);
       //setLS("access_token", response.data.data.access_token);
       return response.data;
     } catch (err: any) {
@@ -62,7 +62,7 @@ export const logoutUser = createAsyncThunk(
   "users/logoutUser",
   async (_, thunkApi) => {
     try {
-      const response = await logoutAccount();
+      const response = await authApi.logoutAccount();
       //setLS("access_token", response.data.data.access_token);
       return response.data;
     } catch (err: any) {

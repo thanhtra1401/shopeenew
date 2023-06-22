@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <div className="bg-neutral-100 py-5">
+    <div className="bg-neutral-100 py-5 border-t-4 border-primary">
       <div className="mx-auto max-w-7xl space-y-10 px-4">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <div className="lg:col-span-1">
