@@ -74,7 +74,7 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-const counterSlice = createSlice({
+const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
@@ -125,5 +125,5 @@ const counterSlice = createSlice({
 });
 
 //export const { logoutUser } = counterSlice.actions;
-const usersReducer = counterSlice.reducer;
+const usersReducer = userSlice.reducer;
 export default usersReducer;

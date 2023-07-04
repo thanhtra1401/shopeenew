@@ -3,6 +3,7 @@ export const registerSchema = yup
   .object({
     email: yup
       .string()
+      .required("Bạn chưa nhập email")
       .max(255, "Độ dài email không được quá 255 ký tự")
       .matches(
         /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
@@ -39,6 +40,23 @@ export const filterPriceSchema = yup
         }
       ),
     //.matches(/^\d+$/, "Vui lòng nhập khoảng giá chính xác"),
+  })
+  .required();
+export const searchSchema = yup.object({
+  product_name: yup.string().trim().required("Vui lòng nhập tên sản phẩm"),
+});
+export const ratingSchema = yup
+  .object({
+    email: yup
+      .string()
+      .required("Vui lòng nhập email của bạn")
+      .max(255, "Độ dài email không được quá 255 ký tự")
+      .matches(
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
+        "Email không đúng"
+      ),
+    name: yup.string().required("Vui lòng nhập tên của bạn"),
+    phone_number: yup.string().required("Vui lòng nhập số điện thoại của bạn"),
   })
   .required();
 // export const loginSchema = yup

@@ -10,8 +10,16 @@ import categoriesApi from "../../apis/categories.api";
 import { Category } from "../../types/category.type";
 
 export default function ProductList() {
+  type ProductListType = {
+    productList: Product[];
+    isLoading: boolean;
+  };
+  const initProductList: ProductListType = {
+    productList: [],
+    isLoading: true,
+  };
   const queryParams = useQueryParams();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductListType>(initProductList);
   const [pageSize, setPageSize] = useState(1);
   const [categories, setCategories] = useState<Category[]>([]);
   const {
@@ -23,13 +31,14 @@ export default function ProductList() {
     price_max,
     price_min,
     rating_filter,
+    name,
   } = queryParams;
 
   useEffect(() => {
     productApi
       .getProducts(queryParams)
       .then((res) => {
-        setProducts(res.data.data.products);
+        setProducts({ productList: res.data.data.products, isLoading: false });
         setPageSize(res.data.data.pagination.page_size);
       })
       .catch((err) => {
@@ -44,6 +53,7 @@ export default function ProductList() {
     price_max,
     price_min,
     rating_filter,
+    name,
   ]);
 
   useEffect(() => {
@@ -61,8 +71,17 @@ export default function ProductList() {
           </div>
           <div className="col-span-10">
             <SortFilter queryConfig={queryParams} pageSize={pageSize} />
+            {products.isLoading && (
+              <div className="flex-center">
+                <svg
+                  className="animate-spin h-5 w-5 mr-3 bg-primary "
+                  viewBox="0 0 24 24"
+                ></svg>
+                Loading...
+              </div>
+            )}
             <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
-              {products.map((product) => (
+              {products.productList.map((product) => (
                 <ProductItem product={product} key={product._id} />
               ))}
 

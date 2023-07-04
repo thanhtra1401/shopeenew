@@ -5,6 +5,9 @@ import productApi from "../../apis/product.api";
 import { Product } from "../../types/product.type";
 import ProductRating from "../../components/MainPageContent/ProductItem/ProductRating";
 import { formatCurrency, formatNumberToSocialStyle } from "../../utils";
+import ProductItem from "../../components/MainPageContent/ProductItem/ProductItem";
+import purchaseApi from "../../apis/purchase.api";
+import Rating from "../../components/Rating/Rating";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -32,6 +35,19 @@ export default function ProductDetail() {
       productApi.getProductDetail(id).then((res) => setProduct(res.data.data));
   }, [id]);
 
+  //handleImages
+  const [currentImagesIndex, setCurrentImagesIndex] = useState([0, 5]);
+  const currentImages = product.images.slice(...currentImagesIndex);
+
+  const nextImage = () => {
+    currentImagesIndex[1] < product.images.length &&
+      setCurrentImagesIndex((prev) => [prev[0] + 1, prev[1] + 1]);
+  };
+  const prevImage = () => {
+    currentImagesIndex[0] > 0 &&
+      setCurrentImagesIndex((prev) => [prev[0] - 1, prev[1] - 1]);
+  };
+
   const [activeImage, setActiveImage] = useState("");
   useEffect(() => {
     if (product) {
@@ -42,12 +58,36 @@ export default function ProductDetail() {
     setActiveImage(img);
   };
 
+  //handleAddCart
   const [amount, setAmount] = useState(1);
   const handleIncrease = () => {
     amount < product.quantity && setAmount(amount + 1);
   };
   const handleDecrease = () => {
     amount > 1 && setAmount(amount - 1);
+  };
+  const handleAddCart = async () => {
+    await purchaseApi
+      .addToCart({ product_id: product._id, buy_count: amount })
+      .then((data) => alert(data.data.message))
+      .catch((error) => {
+        if (error.response.status === 401) alert("Bạn cần đăng nhập");
+      });
+  };
+
+  //productRelated
+  const [productsRelated, setProductsRelated] = useState<Product[]>([]);
+  const [limitRelated, setLimitRelated] = useState(5);
+  useEffect(() => {
+    productApi
+      .getProducts({
+        category: product.category._id,
+        limit: limitRelated,
+      })
+      .then((res) => setProductsRelated(res.data.data.products));
+  }, [product.category._id, limitRelated]);
+  const handleLoadReated = () => {
+    setLimitRelated(limitRelated + 5);
   };
 
   return (
@@ -56,18 +96,22 @@ export default function ProductDetail() {
         <div className="bg-white p-4 shadow">
           <div className="grid grid-cols-12 gap-9">
             <div className="col-span-5">
-              <div className="relative w-full cursor-zoom-in overflow-hidden pt-[100%] shadow">
+              <div className="relative w-full  overflow-hidden pt-[100%] shadow">
                 <img
-                  src={product.image}
+                  src={activeImage}
                   alt={product.name}
                   className="pointer-events-none absolute top-0 left-0 h-full w-full bg-white object-cover"
+                  width="500"
                 />
               </div>
               <div className="relative mt-4 grid grid-cols-5 gap-1">
-                <button className="absolute left-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white">
+                <button
+                  className="absolute left-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white"
+                  onClick={prevImage}
+                >
                   <i className="fa-solid fa-chevron-left"></i>
                 </button>
-                {product.images.slice(0, 5).map((img) => {
+                {currentImages.map((img) => {
                   const isActive = img === activeImage;
                   return (
                     <div
@@ -90,7 +134,10 @@ export default function ProductDetail() {
                   );
                 })}
 
-                <button className="absolute right-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white">
+                <button
+                  className="absolute right-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white"
+                  onClick={nextImage}
+                >
                   <i className="fa-solid fa-chevron-right"></i>
                 </button>
               </div>
@@ -159,7 +206,10 @@ export default function ProductDetail() {
               </div>
 
               <div className="mt-8 flex items-center space-x-4">
-                <button className=" px-3 py-2 border-[1px] border-primary rounded-sm text-primary bg-[#FFF5F1] hover:opacity-90">
+                <button
+                  className=" px-3 py-2 border-[1px] border-primary rounded-sm text-primary bg-[#FFF5F1] hover:opacity-90"
+                  onClick={handleAddCart}
+                >
                   <i className="fa-solid fa-cart-plus mr-2"></i>
                   Thêm vào giỏ hàng
                 </button>
@@ -183,6 +233,37 @@ export default function ProductDetail() {
                 __html: product.description,
               }}
             />
+          </div>
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="mt-6 bg-white p-4 shadow">
+          <div className="rounded bg-gray-50 py-4 p-4 text-lg capitalize text-slate-700">
+            Đánh giá sản phẩm
+          </div>
+          <Rating product={product} />
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="mt-6 bg-white p-4 shadow">
+          <div className="rounded bg-gray-50 p-4 text-lg capitalize text-slate-700">
+            Sản phẩm tương tự
+          </div>
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+            {productsRelated.map((productRelated) => (
+              <ProductItem product={productRelated} key={productRelated._id} />
+            ))}
+          </div>
+
+          <div className="flex-center">
+            <button
+              className="mt-4 flex-center py-1 px-3 border-gray-400 border-[1px] rounded-sm "
+              onClick={handleLoadReated}
+            >
+              Xem thêm
+            </button>
           </div>
         </div>
       </div>
