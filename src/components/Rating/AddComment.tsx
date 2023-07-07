@@ -19,22 +19,15 @@ export default function AddComment({
       onClose();
     }
   };
-  type rateType = {
-    comment: string;
-    email: string;
-    gender: string;
-    name: string;
-    phone_number: string;
-    star: number;
-  };
-  const rateInitState = {
-    comment: "",
-    email: "",
-    gender: "",
-    name: "",
-    phone_number: "",
-    star: 0,
-  };
+  // type rateType = {
+  //   comment: string;
+  //   email: string;
+  //   gender: string;
+  //   name: string;
+  //   phone_number: string;
+  //   star: number;
+  // };
+
   type formDataType = {
     comment: string;
     email: string;
@@ -42,7 +35,6 @@ export default function AddComment({
     name: string;
     phone_number: string;
   };
-  const [valueRating, setValueRating] = useState<rateType>(rateInitState);
 
   const [star, setStar] = useState(0);
   const {
@@ -70,8 +62,6 @@ export default function AddComment({
   // console.log("comments", comments);
 
   const onSubmit = handleSubmit((data) => {
-    setValueRating({ ...data, star: star });
-
     const newComments = [...comments, { ...data, star: star }];
 
     setComments(newComments);
