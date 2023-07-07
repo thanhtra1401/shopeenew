@@ -95,7 +95,9 @@ export default function ProductList() {
               <ProductItem />
               <ProductItem /> */}
             </div>
-            <Pagination queryConfig={queryParams} pageSize={pageSize} />
+            {!products.isLoading && (
+              <Pagination queryConfig={queryParams} pageSize={pageSize} />
+            )}
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProductRating from "../MainPageContent/ProductItem/ProductRating";
 import AddComment from "./AddComment";
 import { Product } from "../../types/product.type";

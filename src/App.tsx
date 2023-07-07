@@ -7,6 +7,7 @@ import MainLayout from "./layouts/MainLayout";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import Profile from "./pages/Profile/Profile";
 import ProductDetail from "./pages/ProductDetail/ProductDetail";
+import Cart from "./pages/Cart/Cart";
 export default function App() {
   return (
     <Routes>
@@ -50,6 +51,17 @@ export default function App() {
           element={
             <MainLayout>
               <Profile />
+            </MainLayout>
+          }
+        ></Route>
+      </Route>
+
+      <Route path="" element={<ProtectedRoute />}>
+        <Route
+          path="/cart"
+          element={
+            <MainLayout>
+              <Cart />
             </MainLayout>
           }
         ></Route>

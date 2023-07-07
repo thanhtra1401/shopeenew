@@ -48,7 +48,7 @@ export default function AddComment({
   const {
     register,
     handleSubmit,
-    setError,
+
     formState: { errors },
   } = useForm<formDataType>({
     resolver: yupResolver(ratingSchema),
@@ -85,9 +85,9 @@ export default function AddComment({
     <div
       onClick={handleClose}
       id="container"
-      className={`fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex-center z-10}`}
+      className={`fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex-center z-10 overflow-hidden}`}
     >
-      <div className="relative w-full max-w-2xl max-h-full">
+      <div className="relative w-full max-w-2xl max-h-full ">
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 ">
           <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white capitalize">

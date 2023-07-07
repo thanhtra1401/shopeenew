@@ -6,8 +6,6 @@ export default function ProtectedRoute() {
   const authState = useSelector((state: RootState) => state.user);
 
   const isAuthenticated = authState.isAuthenticated;
-  console.log(authState.loading);
-  console.log(authState.user);
-  console.log(authState.isAuthenticated);
+
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 }
