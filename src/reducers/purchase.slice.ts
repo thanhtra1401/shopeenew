@@ -3,7 +3,7 @@ import purchaseApi from "../apis/purchase.api";
 
 export const addToCart = createAsyncThunk(
   "purchases/addToCart",
-  async (body: { product_id: string; amount_buy: number }) => {
+  async (body: { product_id: string; buy_count: number }) => {
     try {
       const res = await purchaseApi.addToCart(body);
       console.log(res);
