@@ -2,17 +2,20 @@ import { useForm } from "react-hook-form";
 import { Product } from "../../types/product.type";
 import StarRating from "./StarRating";
 import { useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { ratingSchema } from "../../utils/schema";
+// import { yupResolver } from "@hookform/resolvers/yup";
+// import { ratingSchema } from "../../utils/schema";
+import axios from "axios";
 
 export default function AddComment({
   visible,
   onClose,
   product,
+  setLoadCm,
 }: {
   visible: boolean;
   onClose: () => void;
   product: Product;
+  setLoadCm: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const handleClose = (e: any) => {
     if (e.target.id === "container") {
@@ -42,13 +45,11 @@ export default function AddComment({
     handleSubmit,
 
     formState: { errors },
-  } = useForm<formDataType>({
-    resolver: yupResolver(ratingSchema),
-  });
+  } = useForm<formDataType>();
 
-  const [comments, setComments] = useState(
-    JSON.parse(localStorage.getItem("comments") || "[]")
-  );
+  // const [comments, setComments] = useState(
+  //   JSON.parse(localStorage.getItem("comments") || "[]")
+  // );
 
   // useEffect(() => {
   //   const comments = JSON.parse(localStorage.getItem("comments") || "[]");
@@ -61,11 +62,32 @@ export default function AddComment({
   // }
   // console.log("comments", comments);
 
-  const onSubmit = handleSubmit((data) => {
-    const newComments = [...comments, { ...data, star: star }];
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await axios.post(
+        "http://127.0.0.1:8081/api/task2",
+        {
+          product_id: "4",
+          user_id: "1",
+          review: data.comment,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    setComments(newComments);
-    localStorage.setItem("comments", JSON.stringify(newComments));
+      setLoadCm((prev) => prev + 1);
+    } catch (error) {
+      console.log(error);
+    }
+
+    // const newComments = [...comments, { ...data, star: star }];
+    // console.log(data.comment);
+
+    // setComments(newComments);
+    // localStorage.setItem("comments", JSON.stringify(newComments));
     onClose();
   });
 
@@ -77,7 +99,7 @@ export default function AddComment({
       id="container"
       className={`fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex-center z-10 overflow-hidden}`}
     >
-      <div className="relative w-full max-w-2xl max-h-full ">
+      <div className="relative w-full max-w-xl max-h-full ">
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 ">
           <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white capitalize">
@@ -119,7 +141,7 @@ export default function AddComment({
                 placeholder="Hãy chia sẻ cảm nhận của bạn về sản phẩm..."
                 {...register("comment")}
               ></textarea>
-              <div className="mt-4 ">
+              <div className="mt-4 hidden">
                 <input
                   type="radio"
                   id="male"
@@ -141,7 +163,7 @@ export default function AddComment({
                   Chị
                 </label>
               </div>
-              <div className="mt-4 ">
+              <div className="mt-4 hidden ">
                 <div className="flex justify-between">
                   <div className="flex flex-col w-[50%] mr-2 ">
                     <input

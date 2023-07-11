@@ -2,12 +2,10 @@ function StarRating({
   size,
   star,
   setStar,
-  setValue,
 }: {
   size: number;
   star: number;
   setStar: React.Dispatch<React.SetStateAction<number>>;
-  setValue: UseFormSetValue<FieldValues>;
 }) {
   const handleWidth = (order: number) => {
     if (order <= star) return "100%";
