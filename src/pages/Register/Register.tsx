@@ -3,7 +3,7 @@ import Google from "../../components/Logo/Google";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "../../utils/schema";
-import { omit } from "lodash";
+
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../reducers/users.slice";
 import { AppDispatch } from "../../store";
@@ -25,7 +25,13 @@ export default function Register() {
     resolver: yupResolver(registerSchema),
   });
   const onSubmit = handleSubmit(async (data) => {
-    dispatch(registerUser(omit(data, ["confirmPassword"])))
+    const registerInfo = Object.assign(
+      {},
+      { email: data.email, password: data.password }
+    );
+    //const { confirmPassword, ...registerData } = data;
+
+    dispatch(registerUser(registerInfo))
       .unwrap()
       .then((res) => {
         alert(res.message);
