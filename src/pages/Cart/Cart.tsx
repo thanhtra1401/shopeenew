@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Purchase } from "../../types/purchase.type";
 import purchaseApi from "../../apis/purchase.api";
 import { formatCurrency } from "../../utils";
@@ -12,16 +11,16 @@ export default function Cart() {
       .then((data) => setCartList(data.data.data))
       .catch((error) => alert(error));
   }, [cartList.length]);
-  const [amount, setAmount] = useState(1);
+  //const [amount, setAmount] = useState(1);
 
-  const handleIncreaseAmount = (value: number, max: number) => {
-    if (value < max) value++;
-  };
-  const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const numberValue = value.replace(/[^0-9]/g, "");
-    setAmount(Number(numberValue));
-  };
+  // const handleIncreaseAmount = (value: number, max: number) => {
+  //   if (value < max) value++;
+  // };
+  // const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   const numberValue = value.replace(/[^0-9]/g, "");
+  //   setAmount(Number(numberValue));
+  // };
 
   return (
     <div className="bg-gray-200 py-4">
@@ -82,7 +81,7 @@ export default function Cart() {
                 type="text"
                 value={item.buy_count}
                 className="border-gray-300 border-y-[1px] w-16 h-8 flex-center outline-none text-center placeholder-gray-800"
-                onChange={handleChangeAmount}
+                // onChange={handleChangeAmount}
                 placeholder="1"
               />
               {/* <div className=" border-gray-300 border-y-[1px] w-16 h-8 flex-center">
