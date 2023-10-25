@@ -28,7 +28,7 @@ export default function MainHeader() {
     purchaseApi
       .getPurchases({ status: -1 })
       .then((data) => setPurchases(data.data.data));
-  }, [purchases]);
+  }, [purchases.length]);
   return (
     <header className="bg-[linear-gradient(-180deg,#f53d2d,#f63)]">
       <div className="container">
@@ -68,7 +68,10 @@ export default function MainHeader() {
             </div>
           </form>
           <div className="col-span-1">
-            <i className="relative fa-solid fa-cart-shopping text-white text-xl cursor-pointer p-2 ">
+            <i
+              className="relative fa-solid fa-cart-shopping text-white text-xl cursor-pointer p-2 "
+              onClick={() => navigate("/cart")}
+            >
               {authState.isAuthenticated && purchases.length > 0 && (
                 <div className="absolute bg-white rounded-lg px-2 border-primary border-[1px] text-primary text-xs right-[-4px] top-0 ">
                   {purchases.length}
